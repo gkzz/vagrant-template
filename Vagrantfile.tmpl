@@ -1,0 +1,23 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-16.04"
+  config.vbguest.auto_update = false
+
+  config.vm.define "app" do |app|
+    app.vm.hostname = "app"
+    app.vm.network "private_network", ip: "192.168.1.101", virtualbox__intnet: "intnet"
+    app.vm.network "forwarded_port", guest: 8000, host: 8000
+    # app.vm.synced_folder "/home/gkz/workspace/vagrant-template/appShared", "/media/shared"
+    app.vm.synced_folder "/Users/yourname/path/to/djangoShared", "/media/shared"
+  end
+
+  config.vm.define "db" do |db|
+    db.vm.hostname = "db"
+    db.vm.network "private_network", ip: "192.168.1.102", virtualbox__intnet: "intnet"
+    # db.vm.synced_folder "/home/gkz/workspace/vagrant-template/dbShared", "/media/shared"
+    db.vm.synced_folder "/Users/yourname/path/to/postgresShared", "/media/shared"
+    db.vm.network "forwarded_port", guest: 6543, host: 6543
+  end
+end
